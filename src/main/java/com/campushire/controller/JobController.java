@@ -3,10 +3,12 @@ package com.campushire.controller;
 import com.campushire.entity.Job;
 import com.campushire.service.JobService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+
+
 
 @RestController
 @RequestMapping("/api/jobs")
@@ -18,6 +20,11 @@ public class JobController {
         this.jobService = jobService;
     }
    
+    @GetMapping("/featured")
+    public List<Job> getFeaturedJobs() {
+         return  jobService.getFeaturedJobs();
+    }
+    
 
     @GetMapping
     public List<Job> getAllJobs() {
