@@ -3,11 +3,11 @@ package com.campushire.service;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import com.campushire.notification.Notifier;
-
 import com.campushire.entity.Student;
+import com.campushire.event.StudentRegisteredEvent;
 import com.campushire.repository.StudentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class StudentService {
 
     private final StudentRepository studentRepository;
-    private final Notifier notifier;
+    private final ApplicationEventPublisher publisher;
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
@@ -29,7 +29,7 @@ public class StudentService {
 
     public Student createStudent(Student student) {
         Student saved = studentRepository.save(student);
-        notifier.send(saved.getEmail(),"welcome to campushire");
+         publisher.publishEvent(new StudentRegisteredEvent(student.getId(), student.getEmail()));
         return saved;
         //notifier.send(student.getEmail(),"welcome to campushire");
         //return studentRepository.save(student);

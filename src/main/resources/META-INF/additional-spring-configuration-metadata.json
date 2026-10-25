@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "campushire.min-salary-lpa",
+    "type": "java.lang.String",
+    "description": "A description for 'campushire.min-salary-lpa'"
+  },
+  {
+    "name": "campushire.seed.jobs-file",
+    "type": "java.lang.String",
+    "description": "A description for 'campushire.seed.jobs-file'"
+  },
+  {
+    "name": "campushire.currency",
+    "type": "java.lang.String",
+    "description": "A description for 'campushire.currency'"
+  },
+  {
+    "name": "campushire.featured-companies",
+    "type": "java.lang.String",
+    "description": "A description for 'campushire.featured-companies'"
+  }
+]}

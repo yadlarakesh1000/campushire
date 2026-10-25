@@ -14,10 +14,15 @@ import lombok.Setter;
 @Getter 
 @Setter 
 public class ListingConfig {
-       @Value("${campuseire.min-salary-lpa}")
-      private  double minSalary;
-       @Value ("#{'${campushire.featured-companies}'.split(',')}")
-      private List<String> featuredCompanies;
-       @Value("#{clock.zone}")
-      private ZoneId listingZone;
+      
+      private final double minSalary;
+      private final List<String> featuredCompanies;
+      private final ZoneId listingZone;
+      ListingConfig( @Value("${campushire.min-salary-lpa}") double minSalary,
+                     @Value("#{'${campushire.featured-companies}'.split(',')}") List<String> featuredCompanies,
+                     @Value("#{clock.zone}") ZoneId listingZone){
+             this.minSalary=minSalary;
+             this.featuredCompanies=featuredCompanies;
+             this.listingZone=listingZone;
+      }
 }
