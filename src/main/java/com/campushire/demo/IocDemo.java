@@ -1,7 +1,7 @@
 package com.campushire.demo;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
+import com.campushire.demo.ApplicationService;
 public class IocDemo {
     public static void main(String[] args) {
         try (var context = new AnnotationConfigApplicationContext("com.campushire.demo")) { // ④
