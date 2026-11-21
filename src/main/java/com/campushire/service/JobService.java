@@ -1,6 +1,6 @@
 package com.campushire.service;
 
-import com.campushire.config.ListingConfig;
+import com.campushire.config.CampusHireProperties;
 import com.campushire.entity.Job;
 import com.campushire.repository.JobRepository;
 import org.springframework.stereotype.Service;
@@ -9,12 +9,12 @@ import java.util.List;
 
 @Service
 public class JobService {
-
+    private final CampusHireProperties properties;
     private final JobRepository jobRepository;
-    private  final ListingConfig listingConfig;
-    public JobService(JobRepository jobRepository,ListingConfig listingConfig) {
+    
+    public JobService(JobRepository jobRepository,CampusHireProperties properties) {
         this.jobRepository = jobRepository;
-        this.listingConfig=listingConfig;
+        this.properties=properties;
     }
 
     public List<Job> getAllJobs() {
@@ -38,7 +38,7 @@ public class JobService {
         jobRepository.deleteById(id);
     }
     public List<Job> getFeaturedJobs(){
-         return getAllJobs().stream().filter(job -> listingConfig.getFeaturedCompanies().contains(job.getCompany())).filter(job -> job.getSalaryLpa() >= listingConfig.getMinSalary()).toList();
+         return getAllJobs().stream().filter(job -> properties.featuredCompanies().contains(job.getCompany())).filter(job -> job.getSalaryLpa() >= properties.minSalaryLpa()).toList();
 
     }
 }

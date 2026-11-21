@@ -11,7 +11,9 @@ import java.time.Instant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.unit.DataSize;
 
+import com.campushire.config.CampusHireProperties;
 import com.campushire.entity.Job;
 import com.campushire.repository.JobRepository;
 
@@ -21,15 +23,16 @@ import jakarta.annotation.PreDestroy;
 
 @Component
 public class SeedDataLoader {
-
     private final JobRepository jobRepository;
     private final Clock clock;
     private final Resource jobFiles;
+    private final DataSize maxFileSize;
 
-    public SeedDataLoader(JobRepository jobRepository, Clock clock,@Value("${campushire.seed.jobs-file}")Resource jobFiles) {
+    public SeedDataLoader(JobRepository jobRepository, Clock clock, CampusHireProperties properties) {
         this.jobRepository = jobRepository;
         this.clock = clock;
-        this.jobFiles=jobFiles;
+        this.jobFiles=properties.seed().jobsFile();
+        this.maxFileSize=properties.seed().maxFilSize();
     }
 
     @PostConstruct
@@ -43,6 +46,9 @@ public class SeedDataLoader {
         }
         int saved =0;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(jobFiles.getInputStream(), StandardCharsets.UTF_8))){
+                          if (jobFiles.contentLength() > maxFileSize.toBytes()) {   
+                  throw new IllegalStateException("seed file is larger than " + maxFileSize);
+              }
               reader.readLine();
               String line;
               while ((line=reader.readLine())!=null) {
