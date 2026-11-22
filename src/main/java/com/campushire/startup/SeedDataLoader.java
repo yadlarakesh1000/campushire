@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Instant;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.unit.DataSize;
@@ -19,9 +19,12 @@ import com.campushire.repository.JobRepository;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Component
+@Slf4j 
+@Profile ("!prod")
 public class SeedDataLoader {
     private final JobRepository jobRepository;
     private final Clock clock;
@@ -38,7 +41,7 @@ public class SeedDataLoader {
     @PostConstruct
     void seed() {
         if (jobRepository.count() > 0) {
-            System.out.println(">>> seed skipped, jobs already present");
+            log.info("Seed skipped: {} jobs already present", jobRepository.count());
             return;
         }
         if(!jobFiles.exists()){
@@ -61,13 +64,13 @@ public class SeedDataLoader {
               catch(IOException e){
                  throw new UncheckedIOException("could not read"+jobFiles.getDescription(),e);
               }
-                System.out.println(">>> seeded "+saved+ "jobs from"+jobFiles.getDescription()+"at"+Instant.now(clock));
+               log.info("Seeded {} jobs from {} at {}", saved, jobFiles.getDescription(), Instant.now(clock));
         }
     
     
 
     @PreDestroy
     void report() {
-        System.out.println(">>> shutting down, jobs in DB: " + jobRepository.count());
+       log.info("Shutting down, jobs in DB: {}", jobRepository.count());     
     }
 }

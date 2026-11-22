@@ -9,9 +9,11 @@ import com.campushire.repository.JobRepository;
 import com.campushire.repository.StudentRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component 
 @Order(1)
+@Slf4j
 @RequiredArgsConstructor 
 public class StartupSummaryRunner implements ApplicationRunner {
    private  final JobRepository jobRepository;
@@ -21,9 +23,9 @@ public class StartupSummaryRunner implements ApplicationRunner {
   @Override
   public void run(ApplicationArguments args) throws Exception {
           
-         System.out.println(">>> Campushire Ready: "+jobRepository.count() + "jobs" + studentRepository.count() + "students");
+         log.info(">>> Campushire Ready: {} jobs, {} students", jobRepository.count(), studentRepository.count());
          if(args.containsOption("list-jobs")){
-          jobRepository.findAll().forEach(job -> System.out.println(">>>  "+job.getTitle() + "@" + job.getCompany()));
+          jobRepository.findAll().forEach(job -> log.info(">>> {} @ {}", job.getTitle(), job.getCompany()));
          }
   }
   

@@ -43,3 +43,6 @@ logs/
 # ===== OS junk =====
 .DS_Store
 Thumbs.db
+# ===== Keystores (private keys never go to Git) =====
+*.p12
+*.jks
