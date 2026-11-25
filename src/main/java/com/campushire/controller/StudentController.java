@@ -2,6 +2,8 @@ package com.campushire.controller;
 
 import com.campushire.entity.Student;
 import com.campushire.service.StudentService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +32,7 @@ public class StudentController {
         }
         return ResponseEntity.ok(student);
     }
-
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Student createStudent(@RequestBody Student student) {
         return studentService.createStudent(student);

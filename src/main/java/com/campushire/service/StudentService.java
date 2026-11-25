@@ -4,7 +4,10 @@ package com.campushire.service;
 import java.util.List;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.campushire.entity.Student;
 import com.campushire.event.StudentRegisteredEvent;
@@ -26,7 +29,8 @@ public class StudentService {
     public Student getStudentById(Long id) {
         return studentRepository.findById(id).orElse(null);
     }
-
+   
+  
     public Student createStudent(Student student) {
         Student saved = studentRepository.save(student);
          publisher.publishEvent(new StudentRegisteredEvent(student.getId(), student.getEmail()));
@@ -34,7 +38,7 @@ public class StudentService {
         //notifier.send(student.getEmail(),"welcome to campushire");
         //return studentRepository.save(student);
     }
-
+      
     public Student updateStudent(Long id, Student student) {
         student.setId(id);
         return studentRepository.save(student);
