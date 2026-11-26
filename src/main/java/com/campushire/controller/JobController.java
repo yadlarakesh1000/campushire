@@ -9,6 +9,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -27,14 +30,14 @@ public class JobController {
     public List<Job> getFeaturedJobs() {
          return  jobService.getFeaturedJobs();
     }
-    
-
     @GetMapping
-    public List<Job> getAllJobs() {
-        return jobService.getAllJobs();
-    }
-
-    @GetMapping("/{id}")
+    public List<Job> getJobs(@RequestParam(required=false)String location,
+                            @RequestParam (defaultValue = "0")double minSalary){
+                                return jobService.searchJobs(location, minSalary);
+                            }
+    
+    
+   @GetMapping("/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long id) {
         Job job = jobService.getJobById(id);
         if (job == null) {
@@ -51,8 +54,12 @@ public class JobController {
     }
 
     @PutMapping("/{id}")
-    public Job updateJob(@PathVariable Long id, @RequestBody Job job) {
-        return jobService.updateJob(id, job);
+    public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody Job job) {
+        Job updated = jobService.updateJob(id, job);
+        if(updated==null){
+          return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
@@ -68,9 +75,6 @@ public class JobController {
       }
       return ResponseEntity.ok(response);
      }
-    @GetMapping("/search")
-    public List<Job> searchJobs(@RequestParam(required = false)String location,@RequestParam(defaultValue = "0") double minSalary){
-        return  jobService.searchJobs(location, minSalary);
-    }
+   
     
 }

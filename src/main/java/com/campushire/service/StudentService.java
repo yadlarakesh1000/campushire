@@ -40,6 +40,9 @@ public class StudentService {
     }
       
     public Student updateStudent(Long id, Student student) {
+        if(!studentRepository.existsById(id)){
+            return null;
+        }
         student.setId(id);
         return studentRepository.save(student);
     }

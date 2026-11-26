@@ -30,6 +30,9 @@ public class JobService {
     }
 
     public Job updateJob(Long id, Job job) {
+        if(!jobRepository.existsById(id)){
+            return null;
+        }
         job.setId(id);
         return jobRepository.save(job);
     }
